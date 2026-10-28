@@ -1,0 +1,19 @@
+{
+  "id": "./Index%20(5).html",
+  "name": "Bakery & Catering",
+  "short_name": "Bakery",
+  "description": "Bakery sales, orders, and receipts",
+  "start_url": "./Index%20(5).html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#EDE5DD",
+  "theme_color": "#C2456B",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

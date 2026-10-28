@@ -1,0 +1,236 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Bakery</title>
+<meta name="theme-color" content="#C2456B"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Bakery">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="./icon.svg">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EDE5DD;--ink:#2B2320;--mut:#6b5d54;--card:#fff;--line:#eadfd5;--b:#C2456B;--pk:#FBE3EA;--mint:#DDF0E6;--warn:#FFF0D6;--k1:#2B2320;--onink:#fff}
+[data-theme=dark]{--bg:#171210;--ink:#F3ECE6;--mut:#A99D93;--card:#262019;--line:#3a3029;--b:#E0637F;--pk:#3d2430;--mint:#1f3329;--warn:#3d3020;--k1:#4a3d36;--onink:#171210;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px 'DM Sans',sans-serif}
+h1,h2,.brand{font-family:Fraunces,serif;font-weight:600;margin:0}h1{font-size:28px}h2{font-size:18px;margin-bottom:8px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);z-index:5}
+nav .brand{display:none}nav button{flex:1;border:0;background:none;padding:14px 2px;font:inherit;font-size:13px;color:var(--mut);min-height:54px}
+nav button.on{color:var(--b);font-weight:700}
+main{padding:14px 16px 96px;max-width:1000px;margin:auto}
+.card{background:var(--card);border-radius:16px;padding:16px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:14px 0}
+.kpi{border-radius:16px;padding:16px;background:var(--card)}.kpi b{display:block;font-size:26px;margin:8px 0 2px}.kpi small{color:var(--mut)}
+.k1{background:var(--k1);color:#fff}.k1 small{color:#d8cdc3}.k2{background:var(--pk)}.k3{background:var(--mint)}
+input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--card);color:var(--ink);min-height:46px}
+label{font-size:13px;color:var(--mut);display:block;margin:10px 0 4px}
+.btn{background:var(--b);color:#fff;border:0;border-radius:12px;padding:12px 18px;font:inherit;font-weight:700;min-height:48px;cursor:pointer}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}.btn.sm{min-height:40px;padding:8px 12px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}.mut{color:var(--mut);font-size:13px}.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin:10px 0}
+.chip{border:0;border-radius:20px;padding:10px 16px;background:var(--card);color:var(--ink);font:inherit;white-space:nowrap;min-height:44px}.chip.on{background:var(--ink);color:var(--onink)}
+.step{display:flex;gap:6px;align-items:center}.step button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:20px}
+.step input{width:64px;text-align:center;padding:8px}
+.tip{border-radius:12px;padding:12px 14px;margin-bottom:10px}.tip b{display:block;margin-bottom:2px}
+.tip.good{background:var(--mint)}.tip.warn{background:var(--warn)}.tip.idea{background:var(--pk)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dashboard-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin:8px 0 16px}.dashboard-heading p{margin:6px 0 0}
+.period-switch{display:inline-flex;gap:2px;padding:3px;background:var(--card);border:1px solid var(--line);border-radius:10px}.period-switch button{border:0;border-radius:7px;background:transparent;color:var(--mut);font:inherit;padding:8px 12px;min-height:40px;cursor:pointer}.period-switch button.on{background:var(--ink);color:var(--onink)}
+.dashboard-kpis{grid-template-columns:repeat(4,minmax(0,1fr));margin:0 0 16px}.dashboard-kpis .kpi{min-width:0}.dashboard-kpis .kpi b{font-size:clamp(20px,3vw,26px);overflow-wrap:anywhere}
+.dashboard-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}.chart-card{min-width:0}.chart-card h2{margin-bottom:4px}.chart-card svg{display:block;margin-top:12px}.chart-legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--mut);font-size:12px;margin-top:6px}.chart-legend span{display:inline-flex;align-items:center;gap:6px}.chart-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:var(--onink);padding:12px 18px;border-radius:12px;z-index:99}
+#rc{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.rcbox{background:var(--card);border-radius:16px;padding:20px;width:100%;max-width:380px}
+@media(max-width:700px){.dashboard-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-charts{grid-template-columns:1fr}.dashboard-heading{align-items:flex-start}.chart-card{margin-bottom:10px}}
+@media print{body *{visibility:hidden}#rcp,#rcp *{visibility:visible}#rc{position:absolute;inset:0;background:none;display:block;padding:0}.rcbox{box-shadow:none;max-width:none;padding:0;background:#fff;color:#000}#rcp *{color:#000!important}}
+@media(min-width:860px){nav{top:0;bottom:0;right:auto;width:210px;flex-direction:column;justify-content:flex-start;padding:24px 12px;gap:4px;border:0;border-right:1px solid var(--line)}
+nav .brand{display:block;font-size:22px;padding:0 10px 20px}nav button{flex:none;text-align:left;font-size:15px;padding:12px 14px;border-radius:12px;min-height:46px}nav button.on{background:var(--ink);color:var(--onink)}
+main{margin:0 auto 0 230px;padding-bottom:40px}}
+</style></head><body><div id="app"><p style="padding:24px">Loading…</p></div>
+<script>
+const th0=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=th0;
+let S={Items:[],Categories:[],Sales:[],Expenses:[],Orders:[],Settings:[]},view='home',cat='All',cart={},ed=null,saleDate='',tt,receiptAfterSave=false,pendingItemImage='',expensesReady=false,dashboardPeriod='week';
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0'),ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const today=()=>ymd(new Date()),addDays=(s,n)=>{const d=new Date(s+'T12:00');d.setDate(d.getDate()+n);return ymd(d)};
+const cfg=(k,d)=>(S.Settings.find(r=>r.key===k)||{}).value||d,money=n=>cfg('currency','$')+Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2});
+const rev=r=>r.qty*r.price,prof=r=>r.qty*(r.price-r.cost),sum=(a,f)=>a.reduce((t,r)=>t+f(r),0),num=v=>parseFloat(v)||0;
+const API='https://script.google.com/macros/s/AKfycbzo401q6IbUK7UY9HneAZwmMj1ysVan3z-VgrSO4sRJ2OI49p8cMQL1L-iTbsdh8-nPrg/exec';
+const run=async(fn,...args)=>{try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({fn,args,pin:localStorage.getItem('bakeryPin')||''})});const j=await r.json();if(!j.ok)throw new Error(j.error);return j.data}catch(e){note('Error: '+e.message);throw e}};
+function fileToDataUrl(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||''));reader.onerror=()=>reject(new Error('Could not read image'));reader.readAsDataURL(file);});}
+async function loadItemImage(input){const file=input&&input.files&&input.files[0];if(!file)return;pendingItemImage=await fileToDataUrl(file);const preview=$('#item-image-preview');if(preview){preview.innerHTML=`<img src="${pendingItemImage}" style="max-width:100%;max-height:100px;border-radius:12px;border:1px solid var(--line);object-fit:cover">`;}}
+async function savePin(){const currentPin=$('#pin-current').value.trim();const nextPin=$('#pin-new').value.trim();if(nextPin && !/^\d{4,12}$/.test(nextPin)){note('PIN must be 4 to 12 digits');return;}const result=await run('setPin',currentPin,nextPin);localStorage.setItem('bakeryPin', nextPin || '');const msg = result.enabled ? (nextPin ? 'PIN saved' : 'PIN cleared') : 'PIN cleared';note(msg);render();}
+async function getPinStatus(){try{const statusLabel=$('#pin-status');const state=await run('getPinStatus');if(statusLabel){statusLabel.textContent=(state&&state.enabled)?'PIN enabled':'PIN disabled';}}catch(e){const statusLabel=$('#pin-status');if(statusLabel){statusLabel.textContent='PIN status unavailable';}}}
+function note(m){clearTimeout(tt);let t=$('.toast');if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}t.textContent=m;tt=setTimeout(()=>t.remove(),2500)}
+const go=v=>{view=v;ed=null;render();scrollTo(0,0)};
+function setDashboardPeriod(period){dashboardPeriod=period;render()}
+const STATUS=['Pending','Baking','Ready','Collected','Cancelled'];
+
+function dashboardRange(){
+  const now=new Date(),end=today();
+  if(dashboardPeriod==='week'){
+    const start=addDays(end,-6);
+    return{start,end,labels:[...Array(7)].map((_,i)=>{const date=addDays(start,i);return new Date(date+'T12:00').toLocaleDateString(undefined,{weekday:'short'})})};
+  }
+  if(dashboardPeriod==='month'){
+    const first=new Date(now.getFullYear(),now.getMonth(),1),lastDay=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+    return{start:ymd(first),end,labels:[...Array(Math.ceil(lastDay/7))].map((_,i)=>`Week ${i+1}`)};
+  }
+  const quarterStart=Math.floor(now.getMonth()/3)*3,first=new Date(now.getFullYear(),quarterStart,1);
+  return{start:ymd(first),end,labels:[0,1,2].map(i=>new Date(now.getFullYear(),quarterStart+i,1).toLocaleDateString(undefined,{month:'short'}))};
+}
+function rangeIndex(date,range){
+  if(!date||date<range.start||date>range.end)return-1;
+  if(dashboardPeriod==='week')return Math.round((new Date(date+'T12:00')-new Date(range.start+'T12:00'))/86400000);
+  const value=new Date(date+'T12:00');
+  if(dashboardPeriod==='month')return Math.floor((value.getDate()-1)/7);
+  return value.getMonth()-new Date(range.start+'T12:00').getMonth();
+}
+function chartBars(labels,datasets,label){
+  const width=560,height=190,left=34,top=12,bottom=34,plotHeight=height-top-bottom,step=(width-left-8)/Math.max(labels.length,1),groupWidth=Math.min(48,step*.68),barWidth=groupWidth/datasets.length,max=Math.max(1,...datasets.flatMap(dataset=>dataset.values));
+  const bars=datasets.flatMap((dataset,seriesIndex)=>dataset.values.map((value,index)=>{
+    const barHeight=value/max*plotHeight,x=left+index*step+(step-groupWidth)/2+seriesIndex*barWidth,y=top+plotHeight-barHeight;
+    return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(3,barWidth-3).toFixed(1)}" height="${barHeight.toFixed(1)}" rx="3" fill="${dataset.color}"><title>${esc(labels[index])} · ${esc(dataset.name)}: ${money(value)}</title></rect>`;
+  })).join('');
+  const ticks=labels.map((text,index)=>`<text x="${(left+index*step+step/2).toFixed(1)}" y="${height-10}" text-anchor="middle" font-size="11" fill="var(--mut)">${esc(text)}</text>`).join('');
+  return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(label)}" style="width:100%;height:auto;overflow:visible"><line x1="${left}" y1="${top+plotHeight}" x2="${width-8}" y2="${top+plotHeight}" stroke="var(--line)"/>${bars}${ticks}</svg>`;
+}
+function chartLegend(datasets){return `<div class="chart-legend">${datasets.map(dataset=>`<span><i style="background:${dataset.color}"></i>${esc(dataset.name)}</span>`).join('')}</div>`}
+
+function insights(){
+  const T=today(),out=[],s30=S.Sales.filter(r=>r.date>=addDays(T,-29));
+  if(!s30.length)return[{c:'idea',t:'Record a few days of sales',d:'Your personal growth tips will appear here once there is some data.'}];
+  const it={};s30.forEach(r=>{const o=it[r.name]=it[r.name]||{n:r.name,q:0,rv:0,pf:0};o.q+=r.qty;o.rv+=rev(r);o.pf+=prof(r)});
+  const A=Object.values(it).map(o=>({...o,m:o.rv?o.pf/o.rv:0})),avgQ=sum(A,o=>o.q)/A.length;
+  const w=a=>{const t=sum(S.Sales.filter(r=>r.date>addDays(T,a-7)&&r.date<=addDays(T,a)),rev);return t},tw=w(0),lw=w(-7);
+  if(lw>0){const p=Math.round((tw-lw)/lw*100);out.push(p>=0?{c:'good',t:`Sales are up ${p}% on last week`,d:'Keep doing what is working. Ask happy customers for a review or referral.'}:{c:'warn',t:`Sales are down ${-p}% on last week`,d:'Try a short special (for example 10% off a slow item) and post it on WhatsApp or Instagram status.'});}
+  const wd=[0,0,0,0,0,0,0],dn=['Sundays','Mondays','Tuesdays','Wednesdays','Thursdays','Fridays','Saturdays'];
+  s30.forEach(r=>wd[new Date(r.date+'T12:00').getDay()]+=rev(r));
+  const lo=wd.indexOf(Math.min(...wd)),hi=wd.indexOf(Math.max(...wd));
+  if(Math.max(...wd)>0)out.push({c:'idea',t:`${dn[lo]} are your quietest day`,d:`${dn[hi]} are your best. Run a "${dn[lo].slice(0,-1)} treat" offer (a discount or free drink with a cake) to fill the gap.`});
+  const gem=A.filter(o=>o.m>=.5&&o.q<avgQ).sort((a,b)=>b.m-a.m)[0];
+  if(gem)out.push({c:'idea',t:`Push ${gem.n}`,d:`It earns about ${Math.round(gem.m*100)}% margin but sells less than your average item. Put it first when customers ask, or bundle it.`});
+  const low=A.filter(o=>o.m<.3&&o.q>=3).sort((a,b)=>b.rv-a.rv)[0];
+  if(low)out.push({c:'warn',t:`${low.n} has a thin margin (${Math.round(low.m*100)}%)`,d:'Raise the price a little or look at cheaper ingredients or packaging.'});
+  const dead=S.Items.filter(i=>i.active!==false&&!it[i.name]);
+  if(dead.length)out.push({c:'warn',t:`${dead.length} item(s) did not sell in 30 days`,d:dead.slice(0,4).map(i=>i.name).join(', ')+'. Bundle them, discount them, or hide them from the list.'});
+  const C={};const add=(n,d,v)=>{n=(n||'').trim();if(!n)return;const k=n.toLowerCase(),c=C[k]=C[k]||{n,d:new Set(),last:''};c.d.add(d);if(d>c.last)c.last=d};
+  S.Sales.forEach(r=>add(r.customer,r.date));S.Orders.forEach(r=>add(r.customer,r.pickup||r.created));
+  const cs=Object.values(C),reg=cs.filter(c=>c.d.size>=3),lap=cs.filter(c=>c.d.size>=2&&c.last<addDays(T,-30));
+  if(reg.length)out.push({c:'good',t:`${reg.length} regular customer(s): ${reg.slice(0,3).map(c=>c.n).join(', ')}`,d:'Start a loyalty card: every 5th order gets a free cupcake or 10% off. Regulars spend more when rewarded.'});
+  if(lap.length)out.push({c:'idea',t:`${lap.length} customer(s) have gone quiet`,d:`${lap.slice(0,3).map(c=>c.n).join(', ')}: send a friendly "we miss you" message with a small discount.`});
+  const act=S.Orders.filter(o=>!['Collected','Cancelled'].includes(o.status)),soon=act.filter(o=>o.pickup&&o.pickup<=addDays(T,3)),owed=sum(act,o=>num(o.total)-num(o.deposit));
+  if(soon.length)out.push({c:'warn',t:`${soon.length} order(s) due in the next 3 days`,d:'Check ingredients and your baking schedule.'});
+  if(owed>0)out.push({c:'warn',t:`${money(owed)} still to collect on open orders`,d:'Ask for deposits upfront (50% is common) to protect your cash.'});
+  return out;
+}
+
+const views={
+home(){
+  const range=dashboardRange(),sales=S.Sales.filter(r=>r.date>=range.start&&r.date<=range.end),expenses=S.Expenses.filter(r=>r.date>=range.start&&r.date<=range.end);
+  const revenue=sum(sales,rev),grossProfit=sum(sales,prof),expenseTotal=sum(expenses,r=>num(r.amount)),netProfit=grossProfit-expenseTotal;
+  const revenueBuckets=range.labels.map(()=>0),profitBuckets=range.labels.map(()=>0);
+  sales.forEach(row=>{const index=rangeIndex(row.date,range);if(index>=0&&index<range.labels.length){revenueBuckets[index]+=rev(row);profitBuckets[index]+=prof(row)}});
+  const expenseGroups={},itemProfits={},categoryRevenue={};
+  expenses.forEach(row=>{expenseGroups[row.category||'Other']=(expenseGroups[row.category||'Other']||0)+num(row.amount)});
+  sales.forEach(row=>{itemProfits[row.name]=(itemProfits[row.name]||0)+prof(row);categoryRevenue[row.category||'Other']=(categoryRevenue[row.category||'Other']||0)+rev(row)});
+  const topEntries=values=>Object.entries(values).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const expenseEntries=topEntries(expenseGroups),profitEntries=topEntries(itemProfits),categoryEntries=topEntries(categoryRevenue);
+  const expenseLabels=expenseEntries.length?expenseEntries.map(entry=>entry[0]):['No expenses'];
+  const profitLabels=profitEntries.length?profitEntries.map(entry=>entry[0]):['No sales'];
+  const categoryLabels=categoryEntries.length?categoryEntries.map(entry=>entry[0]):['No sales'];
+  const periodName={week:'Last 7 days',month:'This month',quarter:'This quarter'}[dashboardPeriod];
+  const trendSets=[{name:'Revenue',values:revenueBuckets,color:'#C2456B'},{name:'Gross profit',values:profitBuckets,color:'#6A9E79'}];
+  const expenseSet=[{name:'Expenses',values:expenseEntries.length?expenseEntries.map(entry=>entry[1]):[0],color:'#D88C43'}];
+  const profitSet=[{name:'Gross profit',values:profitEntries.length?profitEntries.map(entry=>entry[1]):[0],color:'#6A9E79'}];
+  const categorySet=[{name:'Revenue',values:categoryEntries.length?categoryEntries.map(entry=>entry[1]):[0],color:'#568B9B'}];
+  return `<div class="dashboard-heading"><div><h1>Tasty Base</h1><p class="mut">${esc(cfg('businessName','your business'))} · ${periodName}</p></div><div class="period-switch" role="group" aria-label="Chart time period">${[['week','Week'],['month','Month'],['quarter','Quarter']].map(([value,text])=>`<button class="${dashboardPeriod===value?'on':''}" aria-pressed="${dashboardPeriod===value}" onclick="setDashboardPeriod('${value}')">${text}</button>`).join('')}</div></div>
+  <div class="grid dashboard-kpis"><div class="kpi k1"><small>Net profit</small><b>${money(netProfit)}</b><small>${periodName} · after recorded expenses</small></div>
+  <div class="kpi k3"><small>Gross profit</small><b>${money(grossProfit)}</b><small>After item costs</small></div>
+  <div class="kpi k2"><small>Expenses</small><b>${money(expenseTotal)}</b><small>${expenses.length} recorded this period</small></div>
+  <div class="kpi"><small>Revenue</small><b>${money(revenue)}</b><small>${sales.length} sale line(s) this period</small></div></div>
+  <div class="dashboard-charts"><section class="card chart-card"><div><h2>Revenue and gross profit</h2><p class="mut">See how sales translate into profit over time.</p></div>${chartBars(range.labels,trendSets,'Revenue and gross profit over '+periodName.toLowerCase())}${chartLegend(trendSets)}</section>
+  <section class="card chart-card"><div><h2>Expenses by type</h2><p class="mut">Where operating costs are going.</p></div>${chartBars(expenseLabels,expenseSet,'Expenses by type for '+periodName.toLowerCase())}${chartLegend(expenseSet)}</section>
+  <section class="card chart-card"><div><h2>Profit by item</h2><p class="mut">Products contributing the most gross profit.</p></div>${chartBars(profitLabels,profitSet,'Gross profit by item for '+periodName.toLowerCase())}${chartLegend(profitSet)}</section>
+  <section class="card chart-card"><div><h2>Revenue by category</h2><p class="mut">Compare sales across product categories.</p></div>${chartBars(categoryLabels,categorySet,'Revenue by category for '+periodName.toLowerCase())}${chartLegend(categorySet)}</section></div>`;
+},
+sales(){
+  saleDate=saleDate||today();const cats=['All',...S.Categories.map(c=>c.name)],items=S.Items.filter(i=>i.active!==false&&(cat==='All'||i.category===cat)),day=S.Sales.filter(r=>r.date===saleDate),G={};day.forEach(r=>(G[r.receipt||r.id]=G[r.receipt||r.id]||[]).push(r));
+  return `<h1>New sale</h1><p class="mut">Pick what the customer is buying (or what you sold today), then get a receipt.</p>
+  <div class="two"><div><label>Date</label><input type="date" id="sd" value="${saleDate}" onchange="saleDate=this.value;render()"></div><div><label>Customer (optional)</label><input id="cu" placeholder="Name"></div></div>
+  <div class="chips">${cats.map(c=>`<button class="chip ${c===cat?'on':''}" onclick="cat='${esc(c)}';render()">${esc(c)}</button>`).join('')}</div>
+  <div class="card">${items.map(i=>`<div class="row"><div><b>${esc(i.name)}</b><br><span class="mut">${money(i.price)}</span></div><div class="step"><button onclick="qty('${i.id}',-1)" aria-label="less">−</button><input type="number" inputmode="numeric" min="0" id="q${i.id}" value="${cart[i.id]||0}" oninput="setQ('${i.id}',this.value)"><button onclick="qty('${i.id}',1)" aria-label="more">+</button></div></div>`).join('')||'<p class="mut">No items yet. Add them under Items.</p>'}</div>
+  <div class="two"><div><label>Discount % (optional)</label><input type="number" inputmode="decimal" id="dc" value="0" oninput="tot()"></div><div><label>Total</label><div style="font-size:26px;font-weight:700;padding-top:6px" id="tot">${money(0)}</div></div></div>
+  <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="width:auto;min-height:auto" ${receiptAfterSave?'checked':''} onchange="receiptAfterSave=this.checked"> Show receipt after saving</label>
+  <button class="btn" style="width:100%;margin:14px 0" onclick="saveSale()">Save sale</button>
+  <div class="card"><h2>Sold on ${saleDate} · ${money(sum(day,rev))}</h2>${Object.entries(G).map(([k,g])=>`<div class="row" style="flex-wrap:wrap"><span>${g.map(r=>`${r.qty} × ${esc(r.name)}`).join(', ')}<br><span class="mut">${esc(g[0].customer)} ${g[0].receipt?'· #'+esc(g[0].receipt):''}</span></span><span><b>${money(sum(g,rev))}</b> <button class="btn ghost sm" onclick="reprint('${k}')">Receipt</button> <button class="btn ghost sm" onclick="delGroup('${k}')">Delete</button></span></div>`).join('')||'<p class="mut">Nothing recorded for this day.</p>'}</div>`;
+},
+expenses(){
+  const recent=[...S.Expenses].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  if(!expensesReady)return `<h1>Expenses</h1><div class="card"><p class="mut">Expense tracking is ready, but the live Apps Script must be updated and redeployed before entries can be saved.</p></div>`;
+  return `<h1>Expenses</h1><p class="mut">Track costs that are not included in the item cost, such as utilities, transport, wages, or equipment.</p>
+  <div class="card"><h2>Record an expense</h2><div class="two"><div><label>Date</label><input type="date" id="expense-date" value="${today()}"></div><div><label>Expense type</label><select id="expense-category">${['Ingredients','Packaging','Utilities','Transport','Wages','Equipment','Other'].map(category=>`<option>${category}</option>`).join('')}</select></div></div>
+  <div class="two"><div><label>Description</label><input id="expense-description" placeholder="e.g. Electricity bill or delivery fuel"></div><div><label>Amount</label><input type="number" inputmode="decimal" min="0" step="0.01" id="expense-amount" placeholder="0.00"></div></div>
+  <button class="btn" style="width:100%;margin-top:14px" onclick="saveExpense()">Add expense</button></div>
+  <div class="card"><h2>Expense history</h2>${recent.map(expense=>`<div class="row"><span><b>${esc(expense.description)}</b><br><span class="mut">${esc(expense.date)} · ${esc(expense.category)}</span></span><span style="display:flex;align-items:center;gap:8px"><b>${money(expense.amount)}</b><button class="btn ghost sm" onclick="delRow('Expenses','${expense.id}')" aria-label="Delete expense">Delete</button></span></div>`).join('')||'<p class="mut">No expenses recorded yet.</p>'}</div>`;
+},
+orders(){
+  const o=ed||{},L=[...S.Orders].sort((a,b)=>(['Collected','Cancelled'].includes(a.status)-['Collected','Cancelled'].includes(b.status))||(a.pickup||'').localeCompare(b.pickup||''));
+  return `<h1>Orders</h1><p class="mut">Catering and cake orders with pickup dates and deposits.</p>
+  <div class="card"><h2>New order</h2><div class="two"><div><label>Customer</label><input id="oc"></div><div><label>Phone</label><input id="op" inputmode="tel"></div></div>
+  <label>What was ordered</label><input id="od" placeholder="e.g. 2-tier birthday cake + 50 cupcakes"><div class="two"><div><label>Pickup / delivery date</label><input type="date" id="ok"></div><div><label>Status</label><select id="os">${STATUS.map(s=>`<option>${s}</option>`).join('')}</select></div>
+  <div><label>Total price</label><input type="number" inputmode="decimal" id="ot"></div><div><label>Deposit paid</label><input type="number" inputmode="decimal" id="ox"></div></div>
+  <button class="btn" style="width:100%;margin-top:14px" onclick="saveOrder()">Save order</button></div>
+  <div class="card">${L.map(o=>`<div class="row" style="align-items:flex-start"><div><b>${esc(o.customer)}</b> <span class="mut">${esc(o.phone)}</span><br>${esc(o.details)}<br><span class="mut">Due ${esc(o.pickup)} · Total ${money(o.total)} · Balance ${money(num(o.total)-num(o.deposit))}</span></div>
+  <div style="display:grid;gap:6px"><select onchange="setStatus('${o.id}',this.value)">${STATUS.map(s=>`<option ${s==o.status?'selected':''}>${s}</option>`).join('')}</select><button class="btn ghost sm" onclick="delRow('Orders','${o.id}')">Delete</button></div></div>`).join('')||'<p class="mut">No orders yet.</p>'}</div>`;
+},
+items(){
+  const e=ed||{},image=(e.image||pendingItemImage||'');return `<h1>Items &amp; prices</h1><p class="mut">Add what you sell, with its cost, so profit is worked out for you.</p>
+  <div class="card"><h2>${e.id?'Edit item':'Add item'}</h2><label>Name</label><input id="in" value="${esc(e.name)}"><div class="two"><div><label>Category</label><select id="ic">${S.Categories.map(c=>`<option ${c.name==e.category?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
+  <div><label>Selling price</label><input type="number" inputmode="decimal" id="ip" value="${e.price??''}"></div></div><label>Cost to make (ingredients, packaging)</label><input type="number" inputmode="decimal" id="ik" value="${e.cost??''}">
+  <div class="two" style="margin-top:12px"><div><label>Item photo</label><input type="file" accept="image/*" id="ii" onchange="loadItemImage(this)"></div><div><label>Preview</label><div id="item-image-preview" style="min-height:76px;display:grid;place-items:center;border:1px solid var(--line);border-radius:12px;background:var(--pk);text-align:center;padding:8px;">${image?`<img src="${image}" style="max-width:100%;max-height:100px;border-radius:12px;border:1px solid var(--line);object-fit:cover">`:'<span class="mut">No photo yet</span>'}</div></div></div>
+  <button class="btn" style="width:100%;margin-top:14px" onclick="saveItem()">${e.id?'Update':'Add'} item</button></div>
+  <div class="card">${S.Items.map(i=>`<div class="row"><div style="display:flex;align-items:center;gap:10px"><div style="width:52px;height:52px;display:grid;place-items:center;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--pk)">${i.image?`<img src="${i.image}" style="width:100%;height:100%;object-fit:cover">`:'<span style="font-size:10px;color:var(--mut)">IMG</span>'}</div><div><b style="${i.active===false?'opacity:.4':''}">${esc(i.name)}</b><br><span class="mut">${esc(i.category)} · ${money(i.price)} · cost ${money(i.cost)} · margin ${i.price?Math.round((i.price-i.cost)/i.price*100):0}%</span></div></div>
+  <div class="step"><button class="btn ghost sm" style="width:auto" onclick="editItem('${i.id}')">Edit</button><button class="btn ghost sm" style="width:auto" onclick="toggleItem('${i.id}')">${i.active===false?'Show':'Hide'}</button></div></div>`).join('')}</div>`;
+},
+settings(){
+  return `<h1>Settings</h1><div class="card"><label>Business name</label><input id="sb" value="${esc(cfg('businessName',''))}"><label>Owner's name (for the welcome)</label><input id="so" value="${esc(cfg('ownerName',''))}"><label>Currency symbol</label><input id="sc" value="${esc(cfg('currency','$'))}">
+  <button class="btn" style="width:100%;margin-top:14px" onclick="saveSettings()">Save</button></div>
+  <div class="card"><h2>Security</h2><span class="mut">Add or change the PIN from here.</span><div class="two" style="margin-top:12px"><div><label>Current PIN</label><input id="pin-current" type="password" inputmode="numeric" placeholder="Current PIN"></div><div><label>New PIN</label><input id="pin-new" type="password" inputmode="numeric" placeholder="4-12 digits"></div></div>
+  <div class="row" style="margin-top:12px"><span id="pin-status" class="mut">PIN status loading…</span><button class="btn sm" onclick="savePin()">Save PIN</button></div></div>
+  <div class="card"><h2>Categories</h2>${S.Categories.map(c=>`<div class="row"><span>${esc(c.name)}</span><button class="btn ghost sm" onclick="delRow('Categories','${c.id}')">Remove</button></div>`).join('')}
+  <div class="two" style="margin-top:12px;grid-template-columns:1fr auto"><input id="nc" placeholder="New category"><button class="btn" onclick="addCat()">Add</button></div></div>`;
+}};
+
+function render(){const a=document.activeElement&&document.activeElement.id;
+  $('#app').innerHTML=`<nav><div class="brand">${esc(cfg('businessName','Bakery'))}</div>${[['home','Dashboard'],['sales','New Sale'],['orders','Orders'],['items','Items'],['expenses','Expenses'],['settings','Settings']].map(([k,l])=>`<button class="${view==k?'on':''}" onclick="go('${k}')">${l}</button>`).join('')}</nav><main><div style="text-align:right"><button class="btn ghost sm" onclick="toggleTheme()">${document.documentElement.dataset.theme==='dark'?'Light mode':'Dark mode'}</button></div>${views[view]()}</main>`;try{localStorage.setItem('cache',JSON.stringify(S))}catch(e){};if(view==='settings'){getPinStatus().catch(()=>{const statusLabel=$('#pin-status');if(statusLabel){statusLabel.textContent='PIN status unavailable';}});}tot();}
+function qty(id,n){setQ(id,(cart[id]||0)+n);$('#q'+id).value=cart[id]}
+function setQ(id,v){cart[id]=Math.max(0,Math.floor(num(v)));tot()}
+function total(){const d=num(($('#dc')||{}).value);return sum(S.Items,i=>(cart[i.id]||0)*i.price)*(1-d/100)}
+function tot(){const t=$('#tot');if(t)t.textContent=money(total())}
+async function saveSale(){const rc=Date.now().toString(36).toUpperCase().slice(-6),d=num($('#dc').value),rows=S.Items.filter(i=>cart[i.id]>0).map(i=>({date:saleDate,itemId:i.id,name:i.name,category:i.category,qty:cart[i.id],price:+(i.price*(1-d/100)).toFixed(2),cost:i.cost,customer:$('#cu').value.trim(),discount:d,receipt:rc}));
+  if(!rows.length)return note('Add at least one item');const sv=await run('saveMany','Sales',rows);S.Sales.push(...sv);cart={};render();if(receiptAfterSave)showReceipt(sv);else note('Sale saved')}
+async function saveOrder(){const o={created:today(),customer:$('#oc').value.trim(),phone:$('#op').value.trim(),details:$('#od').value.trim(),pickup:$('#ok').value,total:num($('#ot').value),deposit:num($('#ox').value),status:$('#os').value};
+  if(!o.customer||!o.details)return note('Add customer and details');S.Orders.push(await run('save','Orders',o));note('Order saved');render()}
+async function saveExpense(){if(!expensesReady)return note('Deploy the updated Apps Script to enable expenses');const expense={date:$('#expense-date').value||today(),category:$('#expense-category').value,description:$('#expense-description').value.trim(),amount:num($('#expense-amount').value)};
+  if(!expense.description)return note('Describe the expense');if(expense.amount<=0)return note('Enter an amount greater than zero');S.Expenses.push(await run('save','Expenses',expense));note('Expense saved');render()}
+async function setStatus(id,s){const o=S.Orders.find(x=>x.id===id);o.status=s;await run('save','Orders',o);note('Updated');render()}
+async function saveItem(){const e=ed||{},o={...e,name:$('#in').value.trim(),category:$('#ic').value,price:num($('#ip').value),cost:num($('#ik').value),active:e.active!==false,image:pendingItemImage || (e.image || '')};if(!o.name)return note('Add a name');
+  const r=await run('save','Items',o);if(e.id)Object.assign(S.Items.find(x=>x.id===e.id),r);else S.Items.push(r);ed=null;pendingItemImage='';note('Item saved');render()}
+function editItem(id){ed=S.Items.find(i=>i.id===id);pendingItemImage = ed ? (ed.image || '') : '';render();scrollTo(0,0)}
+async function toggleItem(id){const i=S.Items.find(x=>x.id===id);i.active=i.active===false;await run('save','Items',i);render()}
+async function setCfg(k,v){let r=S.Settings.find(x=>x.key===k);if(!r){r={key:k};S.Settings.push(r)}r.value=v;Object.assign(r,await run('save','Settings',r))}
+async function saveSettings(){await setCfg('businessName',$('#sb').value);await setCfg('ownerName',$('#so').value);await setCfg('currency',$('#sc').value||'$');note('Saved');render()}
+async function addCat(){const n=$('#nc').value.trim();if(!n)return;S.Categories.push(await run('save','Categories',{name:n}));render()}
+async function delRow(n,id){if(!confirm('Delete this?'))return;await run('remove',n,id);S[n]=S[n].filter(r=>r.id!==id);render()}
+
+function toggleTheme(){const t=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=t;localStorage.setItem('theme',t);render()}
+let rcT='';
+function showReceipt(g){closeRc();const r0=g[0];rcT=`${cfg('businessName','')}\nReceipt #${r0.receipt||r0.id}\n${r0.date}${r0.customer?'\nCustomer: '+r0.customer:''}\n\n`+g.map(r=>`${r.qty} x ${r.name}  ${money(rev(r))}`).join('\n')+`\n\nTOTAL: ${money(sum(g,rev))}`+(r0.discount>0?` (${r0.discount}% discount applied)`:'')+'\nThank you!';
+  const d=document.createElement('div');d.id='rc';d.innerHTML=`<div class="rcbox"><div id="rcp"><div class="brand" style="font-size:22px;text-align:center">${esc(cfg('businessName',''))}</div><p class="mut" style="text-align:center">Receipt #${esc(r0.receipt||r0.id)} · ${esc(r0.date)}${r0.customer?'<br>'+esc(r0.customer):''}</p>${g.map(r=>`<div class="row"><span>${r.qty} × ${esc(r.name)}</span><span>${money(rev(r))}</span></div>`).join('')}${r0.discount>0?`<p class="mut">${r0.discount}% discount applied</p>`:''}<div class="row" style="font-size:20px"><b>Total</b><b>${money(sum(g,rev))}</b></div><p class="mut" style="text-align:center">Thank you for your order!</p></div>
+  <div class="two" style="margin-top:14px"><button class="btn" onclick="print()">Print</button><button class="btn ghost" onclick="shareRc()">Share</button></div><button class="btn ghost" style="width:100%;margin-top:8px" onclick="closeRc()">Close</button></div>`;document.body.appendChild(d)}
+function closeRc(){const d=$('#rc');if(d)d.remove()}
+function shareRc(){if(navigator.share)navigator.share({text:rcT}).catch(()=>{});else open('https://wa.me/?text='+encodeURIComponent(rcT))}
+function reprint(k){showReceipt(S.Sales.filter(r=>(r.receipt||r.id)===k))}
+async function delGroup(k){if(!confirm('Delete this whole sale?'))return;const g=S.Sales.filter(r=>(r.receipt||r.id)===k);for(const r of g)await run('remove','Sales',r.id);S.Sales=S.Sales.filter(r=>!g.includes(r));render()}
+function start(){
+  if(API.includes('PASTE_')){$('#app').innerHTML='<p style="padding:24px">Open index.html and replace PASTE_YOUR_WEB_APP_URL_HERE with your Apps Script /exec link.</p>';return}
+  let cached=false;try{const c=localStorage.getItem('cache');if(c){S={...S,...JSON.parse(c)};S.Expenses=S.Expenses||[];cached=true;render()}}catch(e){}
+  run('getAll').then(d=>{S={...S,...d};expensesReady=Array.isArray(d.Expenses);S.Expenses=S.Expenses||[];render()}).catch(e=>{if(!cached)$('#app').innerHTML=`<p style="padding:24px">Could not connect: ${esc(e.message)}<br><br><button class="btn" onclick="start()">Retry</button></p>`})}
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+start();
+</script></body></html>
