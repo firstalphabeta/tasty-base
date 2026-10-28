@@ -5,9 +5,9 @@ const SHEETS = {
   Items: ['id', 'name', 'category', 'price', 'cost', 'active', 'image'],
   Sales: ['id', 'date', 'itemId', 'name', 'category', 'qty', 'price', 'cost', 'customer', 'discount', 'receipt'],
   Expenses: ['id', 'date', 'category', 'description', 'amount'],
-  Orders: ['id', 'created', 'customer', 'phone', 'details', 'pickup', 'total', 'deposit', 'status']
+  Orders: ['id', 'created', 'customer', 'phone', 'details', 'pickup', 'total', 'deposit', 'status', 'cost', 'revenueDate']
 };
-const TEXT_COLS = { Sales: [2], Expenses: [2], Orders: [2, 4, 6] };
+const TEXT_COLS = { Sales: [2], Expenses: [2], Orders: [2, 4, 6, 11] };
 
 function doGet() {
   return ContentService.createTextOutput('Bakery API is running');
@@ -73,7 +73,7 @@ function seed_() {
 
 function getAll() {
   const timezone = Session.getScriptTimeZone();
-  const output = {};
+  const output = { _meta: { orderFinance: true } };
   Object.keys(SHEETS).forEach(name => {
     const sheet = sheet_(name), headers = SHEETS[name];
     if (name === 'Settings' && sheet.getLastRow() < 2) seed_();

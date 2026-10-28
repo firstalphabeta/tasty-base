@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bakery-shell-v7';
+const CACHE_NAME = 'bakery-shell-v10';
 const APP_FILES = [
   './index.html',
   './Index%20(5).html',
