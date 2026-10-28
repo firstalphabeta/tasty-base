@@ -1,21 +1,22 @@
 <!DOCTYPE html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Bakery</title>
-<meta name="theme-color" content="#C2456B"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Bakery">
+<meta name="theme-color" content="#FFF7FA"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Bakery">
 <link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="./icon.svg">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#EDE5DD;--ink:#2B2320;--mut:#6b5d54;--card:#fff;--line:#eadfd5;--b:#C2456B;--pk:#FBE3EA;--mint:#DDF0E6;--warn:#FFF0D6;--k1:#2B2320;--onink:#fff}
+:root{--bg:#FFF7FA;--ink:#35232B;--mut:#78636D;--card:#fff;--line:#F0DCE5;--b:#C92F69;--pk:#FCE4EE;--mint:#F5EAF0;--warn:#FFF0F4;--k1:#C92F69;--onink:#fff}
 [data-theme=dark]{--bg:#171210;--ink:#F3ECE6;--mut:#A99D93;--card:#262019;--line:#3a3029;--b:#E0637F;--pk:#3d2430;--mint:#1f3329;--warn:#3d3020;--k1:#4a3d36;--onink:#171210;color-scheme:dark}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px 'DM Sans',sans-serif}
+*{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{min-height:100vh;min-height:100dvh;margin:0;background:var(--bg);color:var(--ink);font:15px 'DM Sans',sans-serif;overflow-x:hidden}
 h1,h2,.brand{font-family:Fraunces,serif;font-weight:600;margin:0}h1{font-size:28px}h2{font-size:18px;margin-bottom:8px}
-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);z-index:5}
-nav .brand{display:none}nav button{flex:1;border:0;background:none;padding:14px 2px;font:inherit;font-size:13px;color:var(--mut);min-height:54px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;background:var(--card);border-top:1px solid var(--line);z-index:5;padding-bottom:env(safe-area-inset-bottom)}nav::-webkit-scrollbar{display:none}
+nav .brand{display:none}nav button{flex:0 0 auto;min-width:max-content;border:0;background:none;padding:14px 12px;font:inherit;font-size:13px;color:var(--mut);min-height:54px;white-space:nowrap;touch-action:manipulation}
 nav button.on{color:var(--b);font-weight:700}
-main{padding:14px 16px 96px;max-width:1000px;margin:auto}
+.mobile-menu-toggle,.nav-close,.nav-overlay{display:none}
+main{width:100%;padding:14px 16px calc(96px + env(safe-area-inset-bottom));max-width:1200px;margin:auto}
 .card{background:var(--card);border-radius:16px;padding:16px;margin-bottom:14px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:14px 0}
 .kpi{border-radius:16px;padding:16px;background:var(--card)}.kpi b{display:block;font-size:26px;margin:8px 0 2px}.kpi small{color:var(--mut)}
-.k1{background:var(--k1);color:#fff}.k1 small{color:#d8cdc3}.k2{background:var(--pk)}.k3{background:var(--mint)}
+.k1{background:var(--k1);color:#fff}.k1 small{color:#FFE8F0}.k2{background:var(--pk)}.k3{background:#FFF0F5}
 input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:var(--card);color:var(--ink);min-height:46px}
 label{font-size:13px;color:var(--mut);display:block;margin:10px 0 4px}
 .btn{background:var(--b);color:#fff;border:0;border-radius:12px;padding:12px 18px;font:inherit;font-weight:700;min-height:48px;cursor:pointer}
@@ -29,34 +30,54 @@ label{font-size:13px;color:var(--mut);display:block;margin:10px 0 4px}
 .tip.good{background:var(--mint)}.tip.warn{background:var(--warn)}.tip.idea{background:var(--pk)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .dashboard-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin:8px 0 16px}.dashboard-heading p{margin:6px 0 0}
-.period-switch{display:inline-flex;gap:2px;padding:3px;background:var(--card);border:1px solid var(--line);border-radius:10px}.period-switch button{border:0;border-radius:7px;background:transparent;color:var(--mut);font:inherit;padding:8px 12px;min-height:40px;cursor:pointer}.period-switch button.on{background:var(--ink);color:var(--onink)}
+.period-switch{display:inline-flex;gap:2px;padding:3px;background:var(--card);border:1px solid var(--line);border-radius:10px}.period-switch button{border:0;border-radius:7px;background:transparent;color:var(--mut);font:inherit;padding:8px 12px;min-height:40px;cursor:pointer;touch-action:manipulation}.period-switch button.on{background:var(--b);color:var(--onink)}
 .dashboard-kpis{grid-template-columns:repeat(4,minmax(0,1fr));margin:0 0 16px}.dashboard-kpis .kpi{min-width:0}.dashboard-kpis .kpi b{font-size:clamp(20px,3vw,26px);overflow-wrap:anywhere}
 .dashboard-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}.chart-card{min-width:0}.chart-card h2{margin-bottom:4px}.chart-card svg{display:block;margin-top:12px}.chart-legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--mut);font-size:12px;margin-top:6px}.chart-legend span{display:inline-flex;align-items:center;gap:6px}.chart-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
 .toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:var(--onink);padding:12px 18px;border-radius:12px;z-index:99}
 #rc{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
 .rcbox{background:var(--card);border-radius:16px;padding:20px;width:100%;max-width:380px}
-@media(max-width:700px){.dashboard-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-charts{grid-template-columns:1fr}.dashboard-heading{align-items:flex-start}.chart-card{margin-bottom:10px}}
+@media(max-width:700px){main{padding:12px 12px calc(88px + env(safe-area-inset-bottom))}.dashboard-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.dashboard-kpis .kpi{padding:12px}.dashboard-kpis .kpi b{font-size:21px}.dashboard-kpis .kpi small{font-size:11px}.dashboard-charts{grid-template-columns:1fr}.dashboard-heading{align-items:flex-start;gap:10px}.dashboard-heading h1{font-size:26px}.period-switch{max-width:100%}.period-switch button{padding:8px 10px}.chart-card{margin-bottom:10px}.card{padding:14px;border-radius:12px}.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}.row{min-width:0}.row>span,.row>div{min-width:0;overflow-wrap:anywhere}}
+@media(max-width:360px){main{padding-left:10px;padding-right:10px}.dashboard-kpis{grid-template-columns:1fr 1fr}.dashboard-kpis .kpi{padding:10px}.dashboard-kpis .kpi b{font-size:19px}.two{grid-template-columns:1fr}nav button{padding-left:11px;padding-right:11px}}
+@media(max-width:420px){.two{grid-template-columns:1fr}}
+@media(max-width:859px){
+  .mobile-menu-toggle{display:inline-grid;place-items:center;width:44px;height:44px;padding:0;font-size:24px;line-height:1}
+  .nav-overlay{display:block;position:fixed;inset:0;z-index:19;border:0;padding:0;background:rgba(35,20,28,.48);opacity:0;visibility:hidden;transition:opacity .24s ease,visibility .24s ease}
+  .nav-overlay.visible{opacity:1;visibility:visible}
+  nav{top:0;right:auto;bottom:0;left:0;width:min( min(82vw,320px), calc(100vw - 52px));height:100vh;height:100dvh;padding:calc(18px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:6px;overflow-x:hidden;overflow-y:auto;border:0;border-right:1px solid var(--line);box-shadow:12px 0 36px rgba(48,20,34,.16);transform:translateX(-105%);transition:transform .28s cubic-bezier(.2,.75,.25,1);z-index:20;visibility:hidden}
+  nav.open{transform:translateX(0);visibility:visible}
+  nav .brand{display:block;padding:8px 8px 20px;font-size:22px}
+  nav button{flex:0 0 auto;width:100%;min-width:0;min-height:48px;text-align:left;padding:12px 14px;font-size:15px;border-radius:10px}
+  nav button.on{background:var(--pk);color:var(--b)}
+  nav .nav-close{display:inline-grid;place-items:center;position:absolute;top:calc(12px + env(safe-area-inset-top));right:12px;width:44px;height:44px;padding:0;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-size:28px;line-height:1}
+  body.nav-open{overflow:hidden}
+}
+@media(prefers-reduced-motion:reduce){nav,.nav-overlay{transition:none}}
 @media print{body *{visibility:hidden}#rcp,#rcp *{visibility:visible}#rc{position:absolute;inset:0;background:none;display:block;padding:0}.rcbox{box-shadow:none;max-width:none;padding:0;background:#fff;color:#000}#rcp *{color:#000!important}}
 @media(min-width:860px){nav{top:0;bottom:0;right:auto;width:210px;flex-direction:column;justify-content:flex-start;padding:24px 12px;gap:4px;border:0;border-right:1px solid var(--line)}
 nav .brand{display:block;font-size:22px;padding:0 10px 20px}nav button{flex:none;text-align:left;font-size:15px;padding:12px 14px;border-radius:12px;min-height:46px}nav button.on{background:var(--ink);color:var(--onink)}
 main{margin:0 auto 0 230px;padding-bottom:40px}}
 </style></head><body><div id="app"><p style="padding:24px">Loading…</p></div>
 <script>
-const th0=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=th0;
+const th0=localStorage.getItem('theme')||'light';document.documentElement.dataset.theme=th0;
 let S={Items:[],Categories:[],Sales:[],Expenses:[],Orders:[],Settings:[]},view='home',cat='All',cart={},ed=null,saleDate='',tt,receiptAfterSave=false,pendingItemImage='',expensesReady=false,dashboardPeriod='week';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pad=n=>String(n).padStart(2,'0'),ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const today=()=>ymd(new Date()),addDays=(s,n)=>{const d=new Date(s+'T12:00');d.setDate(d.getDate()+n);return ymd(d)};
 const cfg=(k,d)=>(S.Settings.find(r=>r.key===k)||{}).value||d,money=n=>cfg('currency','$')+Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2});
 const rev=r=>r.qty*r.price,prof=r=>r.qty*(r.price-r.cost),sum=(a,f)=>a.reduce((t,r)=>t+f(r),0),num=v=>parseFloat(v)||0;
-const API='https://script.google.com/macros/s/AKfycbzo401q6IbUK7UY9HneAZwmMj1ysVan3z-VgrSO4sRJ2OI49p8cMQL1L-iTbsdh8-nPrg/exec';
+const API='https://script.google.com/macros/s/AKfycbzqOiSVB5dlJwCsHpYTttAT4vziO8Y6t4KN78QhEJ4ZtXsbcor9ck2uT_ILh_9Gw3RUBA/exec';
 const run=async(fn,...args)=>{try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({fn,args,pin:localStorage.getItem('bakeryPin')||''})});const j=await r.json();if(!j.ok)throw new Error(j.error);return j.data}catch(e){note('Error: '+e.message);throw e}};
 function fileToDataUrl(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result||''));reader.onerror=()=>reject(new Error('Could not read image'));reader.readAsDataURL(file);});}
 async function loadItemImage(input){const file=input&&input.files&&input.files[0];if(!file)return;pendingItemImage=await fileToDataUrl(file);const preview=$('#item-image-preview');if(preview){preview.innerHTML=`<img src="${pendingItemImage}" style="max-width:100%;max-height:100px;border-radius:12px;border:1px solid var(--line);object-fit:cover">`;}}
 async function savePin(){const currentPin=$('#pin-current').value.trim();const nextPin=$('#pin-new').value.trim();if(nextPin && !/^\d{4,12}$/.test(nextPin)){note('PIN must be 4 to 12 digits');return;}const result=await run('setPin',currentPin,nextPin);localStorage.setItem('bakeryPin', nextPin || '');const msg = result.enabled ? (nextPin ? 'PIN saved' : 'PIN cleared') : 'PIN cleared';note(msg);render();}
 async function getPinStatus(){try{const statusLabel=$('#pin-status');const state=await run('getPinStatus');if(statusLabel){statusLabel.textContent=(state&&state.enabled)?'PIN enabled':'PIN disabled';}}catch(e){const statusLabel=$('#pin-status');if(statusLabel){statusLabel.textContent='PIN status unavailable';}}}
 function note(m){clearTimeout(tt);let t=$('.toast');if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}t.textContent=m;tt=setTimeout(()=>t.remove(),2500)}
-const go=v=>{view=v;ed=null;render();scrollTo(0,0)};
+let mobileNavOpen=false;
+const go=v=>{view=v;ed=null;mobileNavOpen=false;render();scrollTo(0,0)};
+function setMobileNav(open){mobileNavOpen=open;document.body.classList.toggle('nav-open',open);const nav=$('#app nav'),overlay=$('.nav-overlay'),toggle=$('.mobile-menu-toggle');if(nav){nav.classList.toggle('open',open);nav.setAttribute('aria-hidden',String(window.innerWidth<860&&!open))}if(overlay)overlay.classList.toggle('visible',open);if(toggle)toggle.setAttribute('aria-expanded',String(open));if(open){nav?.querySelector('.nav-close')?.focus()}else if(toggle&&window.innerWidth<860){toggle.focus()}}
+function toggleMobileNav(){setMobileNav(!mobileNavOpen)}
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&mobileNavOpen)setMobileNav(false)});
+window.addEventListener('resize',()=>{const nav=$('#mobile-nav');if(window.innerWidth>=860){if(mobileNavOpen)setMobileNav(false);else nav?.setAttribute('aria-hidden','false')}});
 function setDashboardPeriod(period){dashboardPeriod=period;render()}
 const STATUS=['Pending','Baking','Ready','Collected','Cancelled'];
 
@@ -138,7 +159,7 @@ home(){
   const expenseSet=[{name:'Expenses',values:expenseEntries.length?expenseEntries.map(entry=>entry[1]):[0],color:'#D88C43'}];
   const profitSet=[{name:'Gross profit',values:profitEntries.length?profitEntries.map(entry=>entry[1]):[0],color:'#6A9E79'}];
   const categorySet=[{name:'Revenue',values:categoryEntries.length?categoryEntries.map(entry=>entry[1]):[0],color:'#568B9B'}];
-  return `<div class="dashboard-heading"><div><h1>Tasty Base</h1><p class="mut">${esc(cfg('businessName','your business'))} · ${periodName}</p></div><div class="period-switch" role="group" aria-label="Chart time period">${[['week','Week'],['month','Month'],['quarter','Quarter']].map(([value,text])=>`<button class="${dashboardPeriod===value?'on':''}" aria-pressed="${dashboardPeriod===value}" onclick="setDashboardPeriod('${value}')">${text}</button>`).join('')}</div></div>
+  return `<div class="dashboard-heading"><div><h1>Welcome, ${esc(cfg('ownerName','Owner'))}</h1><p class="mut">${esc(cfg('businessName','your business'))} · ${periodName}</p></div><div class="period-switch" role="group" aria-label="Chart time period">${[['week','Week'],['month','Month'],['quarter','Quarter']].map(([value,text])=>`<button class="${dashboardPeriod===value?'on':''}" aria-pressed="${dashboardPeriod===value}" onclick="setDashboardPeriod('${value}')">${text}</button>`).join('')}</div></div>
   <div class="grid dashboard-kpis"><div class="kpi k1"><small>Net profit</small><b>${money(netProfit)}</b><small>${periodName} · after recorded expenses</small></div>
   <div class="kpi k3"><small>Gross profit</small><b>${money(grossProfit)}</b><small>After item costs</small></div>
   <div class="kpi k2"><small>Expenses</small><b>${money(expenseTotal)}</b><small>${expenses.length} recorded this period</small></div>
@@ -197,7 +218,7 @@ settings(){
 }};
 
 function render(){const a=document.activeElement&&document.activeElement.id;
-  $('#app').innerHTML=`<nav><div class="brand">${esc(cfg('businessName','Bakery'))}</div>${[['home','Dashboard'],['sales','New Sale'],['orders','Orders'],['items','Items'],['expenses','Expenses'],['settings','Settings']].map(([k,l])=>`<button class="${view==k?'on':''}" onclick="go('${k}')">${l}</button>`).join('')}</nav><main><div style="text-align:right"><button class="btn ghost sm" onclick="toggleTheme()">${document.documentElement.dataset.theme==='dark'?'Light mode':'Dark mode'}</button></div>${views[view]()}</main>`;try{localStorage.setItem('cache',JSON.stringify(S))}catch(e){};if(view==='settings'){getPinStatus().catch(()=>{const statusLabel=$('#pin-status');if(statusLabel){statusLabel.textContent='PIN status unavailable';}});}tot();}
+  $('#app').innerHTML=`<button class="nav-overlay" aria-label="Close navigation menu" onclick="setMobileNav(false)"></button><nav id="mobile-nav" aria-label="Main navigation" aria-hidden="${window.innerWidth<860&&!mobileNavOpen}"><div class="brand">${esc(cfg('businessName','Bakery'))}</div><button class="nav-close" aria-label="Close menu" onclick="setMobileNav(false)">×</button>${[['home','Dashboard'],['sales','New Sale'],['orders','Orders'],['items','Items'],['expenses','Expenses'],['settings','Settings']].map(([k,l])=>`<button class="${view==k?'on':''}" onclick="go('${k}')">${l}</button>`).join('')}</nav><main><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><button class="btn ghost sm mobile-menu-toggle" aria-label="Open navigation menu" aria-controls="mobile-nav" aria-expanded="${mobileNavOpen}" onclick="toggleMobileNav()">☰</button><button class="btn ghost sm" style="margin-left:auto" onclick="toggleTheme()">${document.documentElement.dataset.theme==='dark'?'Light mode':'Dark mode'}</button></div>${views[view]()}</main>`;document.body.classList.toggle('nav-open',mobileNavOpen);try{localStorage.setItem('cache',JSON.stringify(S))}catch(e){};if(view==='settings'){getPinStatus().catch(()=>{const statusLabel=$('#pin-status');if(statusLabel){statusLabel.textContent='PIN status unavailable';}});}tot();}
 function qty(id,n){setQ(id,(cart[id]||0)+n);$('#q'+id).value=cart[id]}
 function setQ(id,v){cart[id]=Math.max(0,Math.floor(num(v)));tot()}
 function total(){const d=num(($('#dc')||{}).value);return sum(S.Items,i=>(cart[i.id]||0)*i.price)*(1-d/100)}
